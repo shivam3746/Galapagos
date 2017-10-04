@@ -72,10 +72,9 @@ loadData = (container, pathOrURL, name, loader, onError) ->
     name
   }
 
-openSession = (load) -> (model, lastCompileFailed) ->
-  name    = load.name ? normalizedFileName(load.modelPath)
-  session = newSession(load.container, model, false, name, lastCompileFailed, load.onError)
-  load.loader.finish()
+openSession = ({ container, loader, onError }) -> (model, lastCompileFailed, name) ->
+  session = newSession(container, model, false, name, lastCompileFailed, onError)
+  loader.finish()
   session
 
 # process: function which takes a loader as an argument, producing a function that can be run
@@ -135,10 +134,19 @@ fromURL = (url, modelName, container, callback, onError = defaultDisplayError(co
   )
 
 handleCompilation = (nlogo, callback, load) ->
-  onSuccess = (input, lastCompileFailed) -> callback(openSession(load)(input, lastCompileFailed))
+
+  dropNLogoExtension = (s) ->
+    if s.match(/.*\.nlogo/)?
+      s.slice(0, -6)
+    else
+      s
+
+  title = dropNLogoExtension(load.name ? normalizedFileName(load.modelPath))
+
+  onSuccess = (input, lastCompileFailed) -> callback(openSession(load)(input, lastCompileFailed, title))
   onFailure = reportCompilerError(load)
   compiler = (new BrowserCompiler())
-  result   = compiler.fromNlogo(nlogo, [])
+  result   = compiler.fromNlogo(nlogo, [], title)
   if result.model.success
     onSuccess(result, false)
   else

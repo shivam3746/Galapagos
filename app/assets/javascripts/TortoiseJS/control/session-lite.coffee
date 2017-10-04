@@ -91,7 +91,7 @@ class window.SessionLite
       @widgetController.redraw()
       code = @widgetController.code()
       oldWidgets = @widgetController.widgets()
-      codeCompile(code, [], [], oldWidgets, (res) =>
+      codeCompile(code, [], [], oldWidgets, @modelTitle, (res) =>
         if res.model.success
           globalEval(res.model.result)
           @widgetController.ractive.set('isStale',           false)
@@ -187,6 +187,7 @@ class window.SessionLite
                                                , commands: [setupCode, goCode]
                                                , reporters: metrics.map((m) -> m.reporter).concat([stopConditionCode])
                                                , turtleShapes: [], linkShapes: []
+                                               , title: @modelTitle
                                                })
 
     unwrapCompilation =
@@ -216,7 +217,7 @@ class window.SessionLite
 
   run: (code) ->
     Tortoise.startLoading()
-    codeCompile(@widgetController.code(), [code], [], @widgetController.widgets(),
+    codeCompile(@widgetController.code(), [code], [], @widgetController.widgets(), @modelTitle,
       ({ commands, model: { result: modelResult, success: modelSuccess } }) =>
         if modelSuccess
           [{ result, success }] = commands
@@ -242,14 +243,15 @@ globalEval = eval
 
 window.AgentModel = tortoise_require('agentmodel')
 
-window.codeCompile = (code, commands, reporters, widgets, onFulfilled, onErrors) ->
+window.codeCompile = (code, commands, reporters, widgets, title, onFulfilled, onErrors) ->
   compileParams = {
-    code:         code,
-    widgets:      widgets,
-    commands:     commands,
-    reporters:    reporters,
-    turtleShapes: turtleShapes ? [],
-    linkShapes:   linkShapes ? []
+    code
+  , widgets
+  , commands
+  , reporters
+  , turtleShapes: turtleShapes ? []
+  , linkShapes:     linkShapes ? []
+  , title
   }
   try
     onFulfilled((new BrowserCompiler()).fromModel(compileParams))

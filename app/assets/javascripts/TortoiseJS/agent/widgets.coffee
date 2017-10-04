@@ -25,12 +25,6 @@ window.bindWidgets = (container, widgets, code, info, readOnly, filename) ->
       (url) -> if /^https?:\/\//.test(url) then url else undefined, # URL Sanitizer
       (id) -> id)                                                   # ID Sanitizer
 
-  dropNLogoExtension = (s) ->
-    if s.match(/.*\.nlogo/)?
-      s.slice(0, -6)
-    else
-      s
-
   existsInObj = (f) -> (obj) ->
     for _, v of obj when f(v)
       return true
@@ -50,7 +44,7 @@ window.bindWidgets = (container, widgets, code, info, readOnly, filename) ->
     lastCompileFailed:  false,
     isStale:            false,
     exportForm:         false,
-    modelTitle:         dropNLogoExtension(filename),
+    modelTitle:         filename,
     consoleOutput:      '',
     outputWidgetOutput: '',
     markdown:           sanitizedMarkdown,
