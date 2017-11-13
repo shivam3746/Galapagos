@@ -13,6 +13,7 @@
     @tagBuilder.pathToHTML("stylesheets/netlogo-syntax.css")
     @tagBuilder.pathToHTML("stylesheets/spinner.css")
     @tagBuilder.pathToHTML("stylesheets/alert.css")
+    @tagBuilder.pathToHTML("stylesheets/ntango.css")
   </head>
   <body style="margin: 0px;">
     @views.html.spinner()
@@ -64,6 +65,7 @@
     @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/component/console.js")
     @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/component/editor.js")
     @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/component/info.js")
+    @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/component/nettango.js")
     @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/component/plot.js")
     @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/component/title.js")
     @tagBuilder.pathToHTML("javascripts/TortoiseJS/agent/proxy.js")
@@ -79,6 +81,7 @@
     @tagBuilder.pathToHTML("javascripts/plot/highchartsops.js")
     @tagBuilder.pathToHTML("javascripts/alert.js")
     @tagBuilder.pathToHTML("javascripts/new-model.js")
+    @tagBuilder.pathToHTML("ntango.js")
 
     @helper.javascriptRouter("jsRoutes")(
       routes.javascript.Local.standalone

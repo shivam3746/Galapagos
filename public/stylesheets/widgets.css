@@ -492,6 +492,10 @@
   height: auto;
 }
 
+.CodeMirror-scroll {
+  max-height: 500px;
+}
+
 .CodeMirror-scroll.cm-disabled {
   background-color: #ebebe4;
 }

@@ -12,12 +12,13 @@ class window.SessionLite
     @_eventLoopTimeout = -1
     @_lastRedraw = 0
     @_lastUpdate = 0
-    @widgetController.ractive.on('*.recompile',          (_, event)     => @recompile())
-    @widgetController.ractive.on('exportnlogo',          (_, event)     => @exportnlogo(event))
-    @widgetController.ractive.on('exportHtml',           (_, event)     => @exportHtml(event))
-    @widgetController.ractive.on('openNewFile',          (_, event)     => @openNewFile())
-    @widgetController.ractive.on('console.run',          (_, code)      => @run(code))
-    @widgetController.ractive.on('editingModeChangedTo', (_, isEditing) => @setEventLoop(not isEditing))
+    @widgetController.ractive.on('*.recompile',          (_, event)         => @recompile())
+    @widgetController.ractive.on('*.tango-refresh',      (_, blockDefsJson) => @netTangoRefresh(blockDefsJson))
+    @widgetController.ractive.on('exportnlogo',          (_, event)         => @exportnlogo(event))
+    @widgetController.ractive.on('exportHtml',           (_, event)         => @exportHtml(event))
+    @widgetController.ractive.on('openNewFile',          (_, event)         => @openNewFile())
+    @widgetController.ractive.on('console.run',          (_, code)          => @run(code))
+    @widgetController.ractive.on('editingModeChangedTo', (_, isEditing)     => @setEventLoop(not isEditing))
     @widgetController.ractive.set('lastCompileFailed', lastCompileFailed)
     @drawEveryFrame = false
 
@@ -103,6 +104,12 @@ class window.SessionLite
           @alertCompileError(res.model.result)
       , @alertCompileError)
     )
+
+  # This should get a new set of block defs which it uses to refresh the NetTango blocks tab
+  # Then recompile code with the newly empty NetTango blocks code.
+  netTangoRefresh: (blockDefsJson) ->
+    @widgetController.ractive.set('blockDefsJson', blockDefsJson)
+    return
 
   getNlogo: ->
     (new BrowserCompiler()).exportNlogo({
