@@ -16,7 +16,7 @@ object ModelsLibrary extends NetLogoModelCollection {
 
   private val ModelLibRelativePath   = "public/modelslib/"
 
-  private val ModelDirectories     = Seq("Sample Models", "Code Examples", "IABM Textbook", "Curricular Models", "Alternative Visualizations")
+  private val ModelDirectories     = Seq("Sample Models", "Code Examples", "IABM Textbook", "Curricular Models", "Alternative Visualizations", "NetTango")
 
   def prettyFilepath(s: String): String =
     s.stripSuffix(".nlogo")
