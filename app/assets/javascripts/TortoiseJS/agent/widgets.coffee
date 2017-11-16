@@ -179,6 +179,9 @@ window.bindWidgets = (container, widgets, code, info, readOnly, filename) ->
   }
 
   importExport = {
+    exportCSV: (contents) -> (filename) ->
+      saveAs(new Blob([contents], {type: "text/plain:charset=utf-8"}), filename)
+      return
     exportOutput: (filename) ->
       exportText = ractive.findComponent('outputWidget')?.get('text') ? ractive.findComponent('console').get('output')
       exportBlob = new Blob([exportText], {type: "text/plain:charset=utf-8"})
@@ -189,6 +192,11 @@ window.bindWidgets = (container, widgets, code, info, readOnly, filename) ->
       anchor.setAttribute("href", viewController.view.visibleCanvas.toDataURL("img/png"))
       anchor.setAttribute("download", filename)
       anchor.click()
+      return
+    importWorld: ->
+      elem = ractive.find('#import-world-input')
+      elem.click()
+      elem.value = ""
       return
   }
 
@@ -255,6 +263,14 @@ window.bindWidgets = (container, widgets, code, info, readOnly, filename) ->
   )
 
   ractive.on('*.set-patch-size', (_, patchSize) -> setPatchSize(patchSize))
+
+  ractive.on('import-world'
+  , (context) ->
+      reader = new FileReader
+      reader.onload = (e) -> workspace.importWorldFromText(e.target.result)
+      if context.original.target.files.length > 0
+        reader.readAsText(context.original.target.files[0])
+  )
 
   controller = new WidgetController(ractive, model, viewController, plotOps, mouse
                                   , write, output, dialog, worldConfig, importExport)
@@ -700,6 +716,9 @@ template =
         <infotab rawText='{{info}}' editing='false' />
       {{/}}
     </div>
+
+    <input id="import-world-input" type="file" name="import-world" style="display: none;" on-change="import-world" />
+
   </div>
   """
 
