@@ -49,7 +49,19 @@ window.bindWidgets = (container, widgets, code, info, readOnly, filename) ->
     info,
     readOnly,
     netTangoBlocksCode,
-    blockDefsJson:      '{ "blocks" : [ { "action" : "\uD83D\uDC3A wolf actions ", "type" : "nlogo:procedure", "start" : true, "limit" : 1, "format" : "to wolf-actions", "blockColor" : "#b55", "required" : true }, { "action" : "\uD83D\uDC3A forward", "format" : "forward {0}", "params" : [ { "type" : "range", "min" : 0, "max" : 3, "step" : 0.1, "default" : 1, "name" : "steps" } ] }, { "action" : "\uD83D\uDC3A left", "format" : "left random {0}", "params" : [ { "type" : "range", "min" : 0, "max" : 90, "step" : 1, "default" : 50, "random" : true, "name" : "amount", "unit" : "\u00B0" } ] }, { "action" : "\uD83D\uDC3A right", "format" : "right random {0}", "params" : [ { "type" : "range", "min" : 0, "max" : 90, "step" : 1, "default" : 50, "random" : true, "name" : "amount", "unit" : "\u00B0" } ] }, { "action" : "\uD83D\uDC3A change energy", "format" : "set energy energy + {0}", "params" : [ { "type" : "range", "min" : -20, "max" : 20, "step" : 0.5, "default" : 1, "name" : "amount" }] }, { "action" : "\uD83D\uDC3A hatch", "format" : "hatch 1", "blockColor" : "#916da0", "params" : [ { "type" : "int", "min" : 1, "name" : "child count", "default" : 1 } ] }, { "action" : "die", "blockColor" : "#916da0" }, { "action" : "\uD83D\uDC3A if energy <= 0?", "format" : "if energy <= 0", "blockColor" : "#89a", "clauses" : [ ] }, { "action" : "\uD83D\uDC11 if sheep-here?", "format" : "if any? sheep-here", "blockColor" : "#89a", "clauses" : [ ] }, { "action" : "\uD83D\uDC11 ask sheep-here", "blockColor" : "#89a", "format" : "ask sheep-here", "clauses" : [ ] }, { "action" : "chance", "blockColor" : "#89a", "format" : "if random 100 < {0}", "clauses" : [ ], "params" : [ { "type" : "range", "min" : 0, "max" : 100, "step" : 0.5, "default" : 20, "unit" : "%", "name" : "percent" } ] } ]}',
+    blockDefsJson:      '{ "blocks" : [
+  { "action" : "🐺 wolf actions ", "type" : "nlogo:procedure", "start" : true, "limit" : 1, "format" : "to wolf-actions", "blockColor" : "#b55", "required" : true }
+, { "action" : "🐺 forward", "format" : "forward {0}", "params" : [ { "type" : "range", "min" : 0, "max" : 3, "step" : 0.1, "default" : 1, "name" : "steps" } ] }
+, { "action" : "🐺 left", "format" : "left random {0}", "params" : [ { "type" : "range", "min" : 0, "max" : 90, "step" : 1, "default" : 50, "random" : true, "name" : "amount", "unit" : "°" } ] }
+, { "action" : "🐺 right", "format" : "right random {0}", "params" : [ { "type" : "range", "min" : 0, "max" : 90, "step" : 1, "default" : 50, "random" : true, "name" : "amount", "unit" : "°" } ] }
+, { "action" : "🐺 change energy", "format" : "set energy energy + {0}", "params" : [ { "type" : "range", "min" : -20, "max" : 20, "step" : 0.5, "default" : 1, "name" : "amount" }] }
+, { "action" : "🐺 hatch", "format" : "hatch 1", "blockColor" : "#916da0", "params" : [ { "type" : "int", "min" : 1, "name" : "child count", "default" : 1 } ] }
+, { "action" : "die", "blockColor" : "#916da0" }
+, { "action" : "🐺 if energy <= 0?", "format" : "if energy <= 0", "blockColor" : "#89a", "clauses" : [ ] }
+, { "action" : "🐑 if sheep-here?", "format" : "if any? sheep-here", "blockColor" : "#89a", "clauses" : [ ] }
+, { "action" : "🐑 ask sheep-here", "blockColor" : "#89a", "format" : "ask sheep-here", "clauses" : [ ] }
+, { "action" : "chance", "blockColor" : "#89a", "format" : "if random 100 < {0}", "clauses" : [ ], "params" : [ { "type" : "range", "min" : 0, "max" : 100, "step" : 0.5, "default" : 20, "unit" : "%", "name" : "percent" } ] }
+]}',
     lastCompiledCode:   code,
     lastCompileFailed:  false,
     isStale:            false,
@@ -700,12 +712,10 @@ template =
         <editor code='{{code}}' lastCompiledCode='{{lastCompiledCode}}' readOnly='{{readOnly}}' />
       {{/}}
       <label class="netlogo-tab{{#showBlocks}} netlogo-active{{/}}">
-        <input id="blocks-tab-toggle" type="checkbox" checked="{{ showBlocks }}" />
+        <input id="blocks-tab-toggle" type="checkbox" checked="{{ showBlocks }}" on-change="['tango-show-toggle', showBlocks]" />
         <span class="netlogo-tab-text">NetTango Blocks</span>
       </label>
-      {{#showBlocks}}
-        <netTangoBlocksTab blockDefsJson='{{blockDefsJson}}' code='{{code}}' />
-      {{/}}
+      <netTangoBlocksTab blockDefsJson='{{blockDefsJson}}' code='{{code}}' />
       <label class="netlogo-tab{{#showDefinitions}} netlogo-active{{/}}">
         <input id="defs-tab-toggle" type="checkbox" checked="{{ showDefinitions }}" />
         <span class="netlogo-tab-text">NetTango Definitions</span>

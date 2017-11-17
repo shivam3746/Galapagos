@@ -45,18 +45,24 @@ window.RactiveNetTangoBlocksTabWidget = Ractive.extend({
       return
     )
 
+    @parent.on('*.tango-show-toggle', (_, show) ->
+      ntContent = document.getElementById('nt-content')
+      if (ntContent)
+        ntContent.style.display = if show then 'flex' else 'none'
+    )
+
     @parent.on('*.tango-refresh', (_, blocks) ->
-      this.set('blockDefsJson', blocks)
+      thisBoi.set('blockDefsJson', blocks)
       thisBoi.setup(thisBoi, JSON.parse(blocks))
       thisBoi.set('tangoCode', NetTango.exportCode('nt-workspace', 'NetLogo'))
-      this.set('isStale', true)
+      thisBoi.set('isStale', true)
     )
 
     return
 
   template:
     """
-    <div class='netlogo-tab-content' intro='grow:{disable:"info-toggle"}' outro='shrink:{disable:"info-toggle"}' style="display: flex; flex-direction: column; align-items: center;">
+    <div id='nt-content' class='netlogo-tab-content' intro='grow:{disable:"info-toggle"}' outro='shrink:{disable:"info-toggle"}' style="display: none; flex-direction: column; align-items: center;">
       <button class="netlogo-widget netlogo-ugly-button netlogo-recompilation-button" on-click="tango-compile" {{# !isStale }}disabled{{ / }} >Recompile Blocks</button>
       <div id="nt-container" style="margin-bottom: 15px;">
         <canvas id="nt-workspace" width="400" height="400" style="background: #e9e5cd;"></canvas>
